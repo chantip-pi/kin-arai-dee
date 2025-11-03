@@ -26,12 +26,60 @@ export const foods: Food[] = [
 		name: 'หมูผัดกระเทียมพริกไทย',
 		imageUrl: 'https://images.aws.nestle.recipes/resized/3c7934693ebae7a1d4ed42e8498da3d7_7o5a6087_1500_700.jpg',
 	},
+	{
+		name: 'ผัดไทยกุ้งสด',
+		imageUrl: 'https://c.pxhere.com/photos/1b/ec/shrimp_cuisine_thailand_meal_asian_seafood_spicy_traditional-894841.jpg!d',
+	},
+	{
+		name: 'ต้มยำกุ้ง',
+		imageUrl: 'https://source.roboflow.com/wmIq8o8LaGhBCejz7RUF9hfJWz22/NUp1tkZqOHRRhLOWU4U1/original.jpg',
+	},
+	{
+		name: 'แกงเขียวหวานไก่',
+		imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/e7/Khanom_chin_kaeng_kiao_wan_kai.jpg',
+	},
+	{
+		name: 'ข้าวมันไก่',
+		imageUrl: 'https://source.roboflow.com/BgR6eh3EyHNZdvQJPMuaZNUCOV03/FZiWMyABzeZKcyf9Mub7/original.jpg',
+	},
+	{
+		name: 'กะเพราไก่ไข่ดาว',
+		imageUrl: 'https://source.roboflow.com/nWo8BpxrBBVDYKzaqAkVK2HmsPU2/Con0KFKuZXEQgyqcPbms/original.jpg',
+	},
+	{
+		name: 'ส้มตำไทย',
+		imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/1/1c/%E0%B8%95%E0%B8%B3%E0%B9%84%E0%B8%97%E0%B8%A2%E0%B9%84%E0%B8%82%E0%B9%88%E0%B9%80%E0%B8%84%E0%B9%87%E0%B8%A1_%E0%B8%AA%E0%B9%89%E0%B8%A1%E0%B8%95%E0%B8%B3_%E0%B8%95%E0%B8%B3%E0%B8%96%E0%B8%B2%E0%B8%94_Tumtaad_%E0%B8%81%E0%B8%A3%E0%B8%B0%E0%B8%9A%E0%B8%B5%E0%B9%88_01.jpg',
+	},
+	{
+		name: 'ก๋วยเตี๋ยวเรือ',
+		imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQk625PeXLOAdhTVPdgkMVEO2Tgpv4xqrU6w&s',
+	},
+	{
+		name: 'ข้าวซอยไก่',
+		imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/9b/Northern_Thailand_style_curry_noodle_-_%E0%B8%82%E0%B9%89%E0%B8%B2%E0%B8%A7%E0%B8%8B%E0%B8%AD%E0%B8%A2_%285725991023%29.jpg',
+	},
+	{
+		name: 'ผัดซีอิ๊วหมู',
+		imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/34/Sriwan_KuayTiow.JPG',
+	},
+	{
+		name: 'สุกี้น้ำ',
+		imageUrl: 'https://www.industry.in.th/uploadedimages/c1/Product_47949_897733191_fullsize.jpg',
+	},
+	{
+		name: 'ยำวุ้นเส้น',
+		imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/b/be/Yam_wunsen.jpg',
+	},
+	{
+		name: 'หมูทอดกระเทียม',
+		imageUrl: 'https://source.roboflow.com/nWo8BpxrBBVDYKzaqAkVK2HmsPU2/3FN1GA6kdl4dSA2hgxwK/original.jpg',
+	},
 ];
 
 export const createFoodFlexMessage = (food: Food): FlexBubble => {
 	return {
 		type: 'bubble',
-		size: 'mega',
+        size: 'kilo',
 		direction: 'ltr',
 		body: {
 			type: 'box',
@@ -42,7 +90,7 @@ export const createFoodFlexMessage = (food: Food): FlexBubble => {
 					url: food.imageUrl,
 					aspectRatio: '1:1',
 					aspectMode: 'cover',
-					size: 'full',
+                    size: 'full',
 				},
 				{
 					type: 'box',
@@ -51,13 +99,14 @@ export const createFoodFlexMessage = (food: Food): FlexBubble => {
 						{
 							type: 'text',
 							text: 'เมนูที่ได้คือ',
+                            size: 'sm',
 						},
 						{
 							type: 'text',
 							text: food.name,
-							size: 'xl',
+                            size: 'md',
 							weight: 'bold',
-							margin: 'sm',
+                            margin: 'sm',
 						},
 						{
 							type: 'button',
@@ -66,17 +115,17 @@ export const createFoodFlexMessage = (food: Food): FlexBubble => {
 								text: 'กินอะไรดี',
 								label: 'สุ่มอีกครั้ง',
 							},
-							margin: 'lg',
+                            margin: 'md',
 							style: 'primary',
 						},
 					],
-					paddingStart: 'xxl',
-					paddingEnd: 'xxl',
-					paddingTop: 'xl',
-					paddingBottom: 'xl',
+                    paddingStart: 'md',
+                    paddingEnd: 'md',
+                    paddingTop: 'md',
+                    paddingBottom: 'md',
 				},
 			],
-			paddingAll: 'none',
+            paddingAll: 'sm',
 		},
 	};
 };
