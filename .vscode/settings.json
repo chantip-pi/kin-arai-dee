@@ -1,5 +1,12 @@
 {
 	"files.associations": {
-		"wrangler.json": "jsonc"
+	  "wrangler.json": "jsonc"
+	},
+	"editor.formatOnSave": true,
+	"editor.wordWrap": "wordWrapColumn",
+	"editor.wordWrapColumn": 80,
+	"[jsonc]": {
+	  "editor.defaultFormatter": "vscode.json-language-features"
 	}
-}
+  }
+  
