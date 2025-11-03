@@ -1,26 +1,48 @@
-/**
- * Welcome to Cloudflare Workers! This is your first worker.
- *
- * - Run `npm run dev` in your terminal to start a development server
- * - Open a browser tab at http://localhost:8787/ to see your worker in action
- * - Run `npm run deploy` to publish your worker
- *
- * Bind resources to your worker in `wrangler.jsonc`. After adding bindings, a type definition for the
- * `Env` object can be regenerated with `npm run cf-typegen`.
- *
- * Learn more at https://developers.cloudflare.com/workers/
- */
+import type { Message, WebhookRequestBody } from '@line/bot-sdk';
+import { createFoodFlexMessage, getRandomFood } from './utils';
+import { reply } from './line';
+
+export interface Env {
+	LINE_MESSAGING_ACCESS_TOKEN: string;
+}
 
 export default {
-	async fetch(request, env, ctx): Promise<Response> {
-		const url = new URL(request.url);
-		switch (url.pathname) {
-			case '/message':
-				return new Response('Hello, World!');
-			case '/random':
-				return new Response(crypto.randomUUID());
-			default:
-				return new Response('Not Found', { status: 404 });
+	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+		const { method } = request;
+
+		if (method !== 'POST') {
+			return Response.json({ message: 'Method not allowed' }, { status: 405 });
 		}
+		const body = await request.json<WebhookRequestBody>();
+
+		for (const event of body.events) {
+			if (event.type !== 'message' || event.message.type !== 'text') {
+				continue;
+			}
+
+			const replyToken = event.replyToken;
+
+			if (!replyToken) continue;
+
+			// Reply to any text for now (remove filter to ensure replies during testing)
+
+			const randomFood = getRandomFood();
+
+			const messages: Message[] = [
+				{
+					type: 'flex',
+					altText: `เมนูที่ได้คือ${randomFood.name}`,
+					contents: createFoodFlexMessage(randomFood),
+				},
+			];
+
+			ctx.waitUntil(
+				reply({ replyToken, messages, accessToken: env.LINE_MESSAGING_ACCESS_TOKEN})
+					.then((r) => console.log('LINE reply result', r))
+					.catch((e) => console.error('LINE reply error', e))
+			);
+		}
+
+		return Response.json({ message: 'Success' });
 	},
-} satisfies ExportedHandler<Env>;
+};
