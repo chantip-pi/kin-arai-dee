@@ -1,5 +1,5 @@
 import type { Message, WebhookRequestBody } from '@line/bot-sdk';
-import { createFoodFlexMessage, getRandomFood } from './utils';
+import { createFoodFlexMessage, getRandomFood, getRandomNearbyRestaurantLink } from './utils';
 import { reply } from './line';
 
 export interface Env {
@@ -16,25 +16,31 @@ export default {
 		const body = await request.json<WebhookRequestBody>();
 
 		for (const event of body.events) {
-			if (event.type !== 'message' || event.message.type !== 'text') {
-				continue;
-			}
+			if (event.type !== 'message') continue;
 
 			const replyToken = event.replyToken;
-
 			if (!replyToken) continue;
 
-			// Reply to any text for now (remove filter to ensure replies during testing)
+			let messages: Message[] | null = null;
 
-			const randomFood = getRandomFood();
+			if (event.message.type === 'location') {
+				const anyMsg: any = event.message as any;
+				const lat = anyMsg.latitude as number;
+				const lng = anyMsg.longitude as number;
+				const url = getRandomNearbyRestaurantLink(lat, lng);
+				messages = [{ type: 'text', text: `ที่ตั้งร้านอาหารใกล้คุณ: ${url}` }];
+			} else if (event.message.type === 'text') {
+				const randomFood = getRandomFood();
+				messages = [
+					{
+						type: 'flex',
+						altText: `เมนูที่ได้คือ${randomFood.name}`,
+						contents: createFoodFlexMessage(randomFood),
+					},
+				];
+			}
 
-			const messages: Message[] = [
-				{
-					type: 'flex',
-					altText: `เมนูที่ได้คือ${randomFood.name}`,
-					contents: createFoodFlexMessage(randomFood),
-				},
-			];
+			if (!messages) continue;
 
 			ctx.waitUntil(
 				reply({ replyToken, messages, accessToken: env.LINE_MESSAGING_ACCESS_TOKEN})

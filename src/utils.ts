@@ -85,3 +85,23 @@ export const getRandomFood = (): Food => {
 	const randomIndex = Math.floor(Math.random() * foods.length);
 	return foods[randomIndex];
 };
+
+// Returns a Google Maps link to restaurants near a randomized point close to the given coordinates
+export const getRandomNearbyRestaurantLink = (latitude: number, longitude: number): string => {
+	// ~0.009 degrees ~ 1km at equator; scale by cos(lat) for longitude
+	const kmRadius = 1; // approx radius to jitter within
+	const degPerKmLat = 1 / 111; // ~111km per 1 degree latitude
+	const degPerKmLng = 1 / (111 * Math.cos((latitude * Math.PI) / 180) || 1);
+
+	const jitter = () => (Math.random() * 2 - 1); // -1 to 1
+	const latOffset = jitter() * kmRadius * degPerKmLat;
+	const lngOffset = jitter() * kmRadius * degPerKmLng;
+
+	const lat = latitude + latOffset;
+	const lng = longitude + lngOffset;
+
+	// Use Google Maps search centered at randomized coords
+	// Example: https://www.google.com/maps/search/restaurant/@lat,lng,16z
+	const zoom = 16;
+	return `https://www.google.com/maps/search/restaurant/@${lat},${lng},${zoom}z`;
+};
